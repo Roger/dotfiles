@@ -1,0 +1,19 @@
+ALL_AC=(tecnico ftp test)
+HOME_AC=(roger superman)
+ALL_DOM=(jessica.opensa.com.ar mafalda.opensa.com.ar hall9000.opensa.com.ar)
+HOME_DOM=(rogerpc.com.ar rogerpc.opensa.com.ar)
+
+my_accounts=()
+
+gen_doms(){
+    for dom in $2; do
+      for acc in $1; do
+        my_accounts+=$acc@$dom
+      done
+    done
+}
+
+gen_doms "$ALL_AC" "$ALL_DOM"
+gen_doms "$HOME_AC" "$HOME_DOM"
+
+zstyle ':completion:*:my-accounts' users-hosts $my_accounts

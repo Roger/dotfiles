@@ -1,0 +1,10 @@
+# Nice colors
+alias ls="ls --color=auto"
+alias grep="grep --color"
+
+# restore X env
+alias restore_x_env="source /tmp/restore_x_env"
+
+# security measures
+alias cp="cp -i"
+alias mv="mv -i"

@@ -1,0 +1,17 @@
+export PAGER=vimpager
+export EDITOR=vim
+export SVN_EDITOR=vim
+
+# python virtual envs
+export WORKON_HOME=$HOME/.virtualenvs
+
+if [ -e /usr/bin/virtualenvwrapper_bashrc ]; then
+    source /usr/bin/virtualenvwrapper_bashrc
+fi
+
+if [ -e /usr/bin/virtualenvwrapper.sh ]; then
+    source /usr/bin/virtualenvwrapper.sh
+fi
+
+# Remove stop output in shell
+stty stop ''

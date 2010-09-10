@@ -1,0 +1,19 @@
+ALL_AC=()
+HOME_AC=(roger root)
+ALL_DOM=()
+HOME_DOM=(rogerpc.com.ar)
+
+my_accounts=()
+
+gen_doms(){
+    for dom in $2; do
+      for acc in $1; do
+        my_accounts+=$acc@$dom
+      done
+    done
+}
+
+gen_doms "$ALL_AC" "$ALL_DOM"
+gen_doms "$HOME_AC" "$HOME_DOM"
+
+zstyle ':completion:*:my-accounts' users-hosts $my_accounts

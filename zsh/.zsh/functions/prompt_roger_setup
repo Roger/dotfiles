@@ -1,0 +1,73 @@
+# roger prompt theme
+
+if [ -e /proc/acpi/battery/BAT0/state ]; then
+   EEEBAT=1
+fi
+
+function prompt-roger-preexec {
+    setopt localoptions noxtrace noksharrays
+    if [ EEEBAT = 1 ]; then
+        # get battery from acpi (it works in eeepc)
+        psvar[1]=$(egrep -o "([0-9]* mAh)" /proc/acpi/battery/BAT0/state|sed "s# mAh##")
+    fi
+}
+
+function zle-keymap-select {
+    if ( echo ${KEYMAP} | egrep "vi|main" &>/dev/null ); then
+        psvar[2]="${${KEYMAP/vicmd/-- COMMAND --}/(main|viins)/-- INSERT --}"
+    fi
+    zle reset-prompt
+}
+# show mode in vimode
+zle -N zle-keymap-select
+
+# setup the prompt
+prompt_roger_setup () {
+  prompt_widgets=( date bat vimode )
+
+  prompt_opts=( cr percent subst )
+
+  # setup colors pased as argv
+  local text_col=${1:-'white'}
+  local parens_col=${2:-$text_col}
+  local user_col=${3:-$text_col}
+  local host_col=${4:-$text_col}
+
+  local c_host="%B%F{$host_col}"
+  local c_met="%B%F{$parens_col}"
+  local c_user="%b%F{$user_col}"
+  local c_all="%b%F{$text_col}"
+  local reset="%b%f"
+
+  # special characters
+  local -A schars
+  autoload -Uz prompt_special_chars
+  prompt_special_chars
+
+  # date widget
+  local DATE="$c_all-$c_met($c_all%D{%I:%M%P %m/%d/%y}$c_met)$reset"
+  # battery widget
+  local BAT="%(1V.$c_all-$c_met(${c_all}bat: %v%%$c_met)$reset.)"
+  # vimode widget
+  local VIMODE="%(2V.$c_all-$c_met($c_all%2v$c_met)$reset.)"
+
+  # info prompt
+  PS1="$schars[332]$c_met($c_user%n$c_all@$c_host%m$c_met)$reset"
+
+  # setup widgets
+  for widget in $prompt_widgets; do
+    PS1+=$(eval "echo $"$widget:u)
+  done
+
+  # input prompt
+  PS1+="$prompt_newline$schars[300]"
+  PS1+="$c_met($c_all%%:%~$c_met)$reset "
+
+  PS2="... "
+
+  # execute every 30 seconds
+  PERIOD=30
+  add-zsh-hook periodic prompt-roger-preexec
+}
+
+prompt_roger_setup "$@"

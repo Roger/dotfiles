@@ -1,0 +1,7 @@
+export PAGER=vimpager
+
+export WORKON_HOME=$HOME/.virtualenvs
+source /usr/bin/virtualenvwrapper.sh
+
+#remove stop output in shell
+stty stop ''

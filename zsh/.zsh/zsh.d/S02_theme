@@ -1,0 +1,13 @@
+autoload promptinit; promptinit
+if [ $(whoami) = root ]; then
+    prompt roger white black red
+else
+    prompt roger white black green
+fi
+
+
+#if [ "$SSH_CONNECTION" ]; then
+#  RPROMPT="[ssh %t]"
+#else
+#  RPROMPT="[local %t]"
+#fi
